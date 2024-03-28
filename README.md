@@ -2,6 +2,19 @@
 
 The goal of this repo is to provide a small reproduction of an issue with storybook 8 and `runExecutor` from `@nx/devkit`.
 
+## step to create the repo
+- `npx create-nx-workspace@latest` : create nx workspace
+- `nx add @storybook/angular` : add storybook
+- `nx g @nx/angular:library --name=test --directory=libs/test --projectNameAndRootFormat=as-provided --no-interactive` : create an angular library
+- `nx g @nx/angular:storybook-configuration --project=test --no-interactive`: generate storybook configuration for test library
+- `npx storybook@latest upgrade --config-dir ./libs/test/.storybook`: upgrade storybook to version 8 with the storybook schematics then follow each steps
+- `nx add @storybook/plugin` : add storybook plugin
+- `nx g @nx/plugin:plugin --name=test-plugin --directory=plugin/test-plugin --projectNameAndRootFormat=as-provided --no-interactive` : create a plugin
+- `nx g @nx/plugin:executor --name=storybook --directory=/plugin/test-plugin/src/executors --nameAndDirectoryFormat=as-provided --no-interactive` : create an executor for the plugin
+- update project.json of test lib to add the executor
+ 
+## issue
+
 if you run `nx run test:storybook`, everything works normally
 
 However, I created a custom executor that runs the above command, and when I run ` nx run test:run-story`, it fails with the following error:
